@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+     <style>
+        .btn-xs {
+            padding: 1px 5px !important;
+            font-size: 12px !important;
+            line-height: 1.5 !important;
+            border-radius: 3px !important;
+            margin-left: 3px;
+        }
+        .btn-sm {
+            padding: 5px 10px !important;
+            font-size: 12px !important;
+            line-height: 1.5 !important;
+            border-radius: 3px !important;
+        }
+        .actions{
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid;
+            padding: 0 5px 0 5px;
+            margin-left: 5px;
+        }
+        .draggable {
+            border: 1px solid black;
+            width: 100%;
+            min-height: 35px;
+            height: auto;
+            float: left;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+        .target {
+            border: 1px solid black;
+            width: 100%;
+            min-height: 200px;
+            height: auto;
+            padding: 5px;
+            margin: 5px;
+            float: left;
+            font-size: .9rem;
+        }
+        .taskHeader{
+            background-color: lightblue;
+            padding-left: 5px;
+            height: 25px;
+        }
+        .taskHeader div{
+          display: inline-block;
+        }
+        .subTask{
+            margin-left: 10px;
+            width: 97%;
+        }
+        .subTask div{
+          display: inline-block;
+        }
+    </style>
+  </head>
+  <body>
+   
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
