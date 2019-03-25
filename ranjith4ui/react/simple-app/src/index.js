@@ -7,12 +7,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Drogon extends React.Component{
 
+    
+
     constructor(props){
       super(props);
 
       this.handleFocus = this.handleFocus.bind(this);
       this.handleFocusOut = this.handleFocusOut.bind(this);
       this.state = {
+        statusLists: this.props.statusList,
         taskLists: this.props.taskList,
         subTaskLists: this.props.subTaskList
         };
@@ -27,28 +30,36 @@ class Drogon extends React.Component{
     allowDrop = (ev) => {
         
         ev.preventDefault();
-        console.log(ev.target.id);
+        console.log('drogOver'+ev.target.id); 
+        let parentID = ev.target.id;
+        if(parentID === 'task' || parentID === 'progress'){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     drag = (ev) => {
-        
+        console.log(ev.target.id);
         ev.dataTransfer.setData('text', ev.target.id);
     }
+    
 
     drop = (ev) => {
-
             ev.preventDefault();
+            if(ev.target.id === 'task' || ev.target.id === 'progress'){
             let data = ev.dataTransfer.getData('text');
             ev.target.appendChild(document.getElementById(data));
-            console.log(ev.target.id);
+            document.getElementById(data).parentNode.replaceWith(ev.target);
+            //console.log(ev.target.id);
              ev.dataTransfer.clearData();
-            
+            }
 
         
     }
 
     addTask = () => {
-        const newData = {id: 100+this.state.taskLists.length, name: 'New task', priority: 3};
+        const newData = {id: 100+this.state.taskLists.length, name: 'New task', priority: 3, status: 'new'};
         this.setState(prevState => ({taskLists: [...prevState.taskLists, newData]}));
     }
 
@@ -63,9 +74,9 @@ class Drogon extends React.Component{
         let index = this.state.taskLists.indexOf(item);
         let newsubtask = this.state.subTaskLists.filter( e => { return e.parentId !== item.id;});
 
-        this.setState({subTaskLists:newsubtask},function () {
-             return this.state.subTaskLists;
-        });
+        //this.setState({subTaskLists:newsubtask},function () {
+             //return this.state.subTaskLists;
+        //});
         
         if (index !== -1) {
             this.state.taskLists.splice(index, 1);
@@ -104,7 +115,7 @@ class Drogon extends React.Component{
 
     render() {
 
-        const { taskLists, subTaskLists } = this.state;
+        const { taskLists, subTaskLists, statusLists } = this.state;
 
         return (
             <div className='container'>
@@ -112,12 +123,12 @@ class Drogon extends React.Component{
                         <div className='col-sm-12'>
                             <div className='text-left'>
                               <h3>Drogon</h3>
-                              <p>Trello Board</p> 
+                              <h5>Trello Board</h5> 
                             </div>
                             <div className='container'>
                                 <div className='row'>
                                     <div className='col-sm-4'>
-                                        All task Lists
+                                        New tasks
                                         <button onClick={this.addTask} className='btn btn-primary btn-sm float-right'>Add Task</button>
                                     </div>
                                     <div className='col-sm-4'>
@@ -128,10 +139,13 @@ class Drogon extends React.Component{
                                     </div>
                                 </div>
                                 <div className='row'>
+                                    {
+                                                statusLists.map( ( statusList ) => (
+
                                     <div className='col-sm-4'>
-                                        <div className='target' id='task' onDrop={this.drop} onDragOver={this.allowDrop}>
+                                        <div className='target' id={statusList.name} onDrop={this.drop} onDragOver={this.allowDrop}>
                                             {
-                                                taskLists.map( ( taskList ) => (
+                                                taskLists.filter( taskList => taskList.status === statusList.name ).map( ( taskList ) => (
 
                                                  <div id={taskList.id} className='draggable' draggable='true' onDragStart={this.drag}>
                                                     <div className='taskHeader'>{taskList.name}
@@ -139,10 +153,10 @@ class Drogon extends React.Component{
                                                         
 
                                                         <span onClick={this.appendSubtask.bind(this, taskList)} className='actions float-right'>+</span>  
-                                                        <span onClick={this.deleteTask.bind(this, taskList)} className='actions float-right'>x</span>
+                                                        <span id={taskList.id+1250} onClick={this.deleteTask.bind(this, taskList)} className='actions float-right'>x</span>
                                                     </div>
                                                  
-                                                    {
+                                                    {   
                                                         
                                                         subTaskLists.map((subTaskList) => (
 
@@ -164,12 +178,10 @@ class Drogon extends React.Component{
                                             }
                                         </div>
                                     </div>
-                                    <div className='col-sm-4'>
-                                        <div className='target' id='progress' onDrop={this.drop} onDragOver={this.allowDrop}></div>
-                                    </div>
-                                    <div className='col-sm-4'>
-                                        <div className='target' id='completed' onDrop={this.drop} onDragOver={this.allowDrop}></div>
-                                    </div>
+
+                                         ))
+                                    }
+                                    
                                 </div>
                              </div> 
                         </div>
@@ -182,12 +194,18 @@ class Drogon extends React.Component{
 
 }
 
+const statusList = [
+    { id:215, name: 'new', order: 1, activstatus: true },
+    { id:211, name: 'progress', order: 2, activstatus: true },
+    { id:212, name: 'completed', order: 3, activstatus: true }
+];
+
 const taskList = [
-    { id:15, name: 'Develop wireframe/UI', priority: 2},
-    { id:11, name: 'Develop wireframe/UX', priority: 2},
-    { id:12, name: 'Develop UI with bootstrap', priority: 2},
-    { id:13, name: 'Implement with React', priority: 2},
-    { id:14, name: 'Integration API', priority: 2}
+    { id:15, name: 'Develop wireframe/UI', priority: 2, status: 'new' },
+    { id:11, name: 'Develop wireframe/UX', priority: 2, status: 'new' },
+    { id:12, name: 'Develop UI with bootstrap', priority: 2, status: 'progress' },
+    { id:13, name: 'Implement with React', priority: 2, status: 'progress' },
+    { id:14, name: 'Integration API', priority: 2, status: 'new' }
     
 ];
 
@@ -205,4 +223,4 @@ const subTaskList = [
 
 
 // render the element onto the HTML page
-ReactDOM.render( <Drogon taskList={taskList} subTaskList={subTaskList}></Drogon>, document.getElementById( 'root' ) );
+ReactDOM.render( <Drogon taskList={taskList} subTaskList={subTaskList} statusList={statusList}></Drogon>, document.getElementById( 'root' ) );
