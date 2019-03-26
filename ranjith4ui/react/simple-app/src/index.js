@@ -13,7 +13,8 @@ class Drogon extends React.Component{
       super(props);
 
       this.handleFocus = this.handleFocus.bind(this);
-      this.handleFocusOut = this.handleFocusOut.bind(this);
+      this.updateTaskList = this.updateTaskList.bind(this);
+      this.updateSubTaskList = this.updateSubTaskList.bind(this);
       this.state = {
         statusLists: this.props.statusList,
         taskLists: this.props.taskList,
@@ -105,11 +106,19 @@ class Drogon extends React.Component{
    }
 
    handleFocus = (text) => {
-        console.log('Focused with text: ' + text);
+        //console.log(text);
     }
 
-    handleFocusOut = (text) => {
-        console.log('Left editor with text: ' + text);
+    updateTaskList = (item,text) => {
+        //console.log(item);
+        item.name = text;
+        console.log(item);
+    }
+
+    updateSubTaskList = (item,text) => {
+        //console.log(item);
+        item.name = text;
+        console.log(item);
     }
 
 
@@ -148,8 +157,18 @@ class Drogon extends React.Component{
                                                 taskLists.filter( taskList => taskList.status === statusList.name ).map( ( taskList ) => (
 
                                                  <div id={taskList.id} className='draggable' draggable='true' onDragStart={this.drag}>
-                                                    <div className='taskHeader'>{taskList.name}
-
+                                                    <div className='taskHeader'>
+                                                            <EditableLabel text={taskList.name}
+                                                                labelClassName='myLabelClass'
+                                                                inputClassName='myInputClass'
+                                                                inputWidth='200px'
+                                                                inputHeight='25px'
+                                                                inputMaxLength='50'
+                                                                labelFontWeight='bold'
+                                                                inputFontWeight='bold'
+                                                                onFocus={this.handleFocus.bind(this,taskList)}
+                                                                onFocusOut={this.updateTaskList.bind(this,taskList)}
+                                                            />
                                                         
 
                                                         <span onClick={this.appendSubtask.bind(this, taskList)} className='actions float-right'>+</span>  
@@ -161,7 +180,18 @@ class Drogon extends React.Component{
                                                         subTaskLists.map((subTaskList) => (
 
                                                             <div className='subTask' style={{display:subTaskList.parentId === taskList.id ? 'inline-block' : 'none'}}>
-                                                            <input type='checkbox'/> {subTaskList.parentId === taskList.id ? subTaskList.name : null}
+                                                            <input type='checkbox'/> 
+                                                            <EditableLabel text={subTaskList.parentId === taskList.id ? subTaskList.name : null}
+                                                                labelClassName='myLabelClass'
+                                                                inputClassName='myInputClass'
+                                                                inputWidth='200px'
+                                                                inputHeight='25px'
+                                                                inputMaxLength='50'
+                                                                labelFontWeight='200'
+                                                                inputFontWeight='200'
+                                                                onFocus={this.handleFocus}
+                                                                onFocusOut={this.updateSubTaskList.bind(this,subTaskList)}
+                                                            />
                                                                
                                                             <span onClick={this.deleteSubTask.bind(this, subTaskList)} className='actions float-right'>x</span>
 
